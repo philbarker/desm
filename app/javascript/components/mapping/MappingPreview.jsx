@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { unsetFiles } from "../../actions/files";
+import { unsetFiles, unsetSpecToPreview } from "../../actions/files";
 import FileContent from "./FileContent";
 import { doUnsubmit } from "../../actions/mappingform";
 
@@ -14,6 +14,7 @@ const MappingPreview = () => {
    */
   const handleOnReimport = () => {
     dispatch(unsetFiles());
+    dispatch(unsetSpecToPreview());
     dispatch(doUnsubmit());
   };
 

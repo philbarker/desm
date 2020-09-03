@@ -16,9 +16,45 @@ module Processors
 
       # The domains are listed under the '@graph' object, because at this
       # stage we are dealing with a json-ld file
+      raise InvalidSpecification unless file_content["@graph"].present?
+
       domains = file_content["@graph"]
 
       process_domains(domains)
+    end
+
+    ###
+    # @description: Process the file and return only the json with the nodes
+    #   related to the selected domain and the related properties (to that
+    #   class) and also the properties related with those last properties.
+    #
+    #  So we are going to return a json-ld file with the context and a graph
+    #  node with only one class, all it's properties and recursively, all the
+    #  related properties
+    ###
+    def self.filter_specification(_file)
+      # Hardcoded, just to make the frontend work, the first time, we are going
+      # to need something like this.
+      {
+        "@context": {
+          "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+          "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+          "xsd": "http://www.w3.org/2001/XMLSchema#"
+        },
+        "@graph": [
+          {
+            "@id": "http://schema.org/maximumAttendeeCapacity",
+            "@type": "rdf:Property",
+            "http://schema.org/domainIncludes": [
+              {
+                "@id": "http://schema.org/Event"
+              }
+            ],
+            "rdfs:comment": "The total number of individuals that may attend an event or venue.",
+            "rdfs:label": "maximumAttendeeCapacity"
+          }
+        ]
+      }
     end
 
     ###
